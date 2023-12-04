@@ -12,10 +12,10 @@ import (
 //https://adventofcode.com/2023/day/2
 
 func main() {
-	fmt.Println(sumIDs("input"))
+	fmt.Println(sumPowers("input"))
 }
 
-func sumIDs(filename string) int {
+func sumPowers(filename string) int {
 
 	readFile, err := os.Open(filename)
 	defer readFile.Close()
@@ -38,41 +38,35 @@ func sumIDs(filename string) int {
 }
 
 func parseLine(line string) int {
-	id := extractFirstNumber(line)
 
-	redCubes := 12
-	greenCubes := 13
-	blueCubes := 14
+	redCubes := 0
+	greenCubes := 0
+	blueCubes := 0
 
 	game := strings.Split(line, ":")
 	reveals := strings.Split(game[1], ";")
-	red := true
-	blue := true
-	green := true
+
 	for _, reveal := range reveals {
 		cubes := strings.Split(reveal, ",")
 		for _, color := range cubes {
 			n := extractFirstNumber(color)
 			if strings.Contains(color, "red") {
 				if n > redCubes {
-					red = false
+					redCubes = n
 				}
 			} else if strings.Contains(color, "blue") {
 				if n > blueCubes {
-					blue = false
+					blueCubes = n
 				}
 			} else if strings.Contains(color, "green") {
 				if n > greenCubes {
-					green = false
+					greenCubes = n
 				}
 			}
 		}
 	}
-	
-	if red && green && blue {
-		return id
-	}
-	return 0
+
+	return redCubes * blueCubes * greenCubes
 }
 
 func extractFirstNumber(s string) int {
